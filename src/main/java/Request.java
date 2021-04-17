@@ -38,6 +38,8 @@ public class Request implements Runnable{
 
 	private void traitementRequete() throws Exception {
 		
+		//test branche distante
+		
 		InputStream inS = socket.getInputStream();
 		DataOutputStream outS = new DataOutputStream(socket.getOutputStream());
 
