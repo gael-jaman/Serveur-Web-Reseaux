@@ -38,6 +38,8 @@ public class Request implements Runnable{
 
 	private void traitementRequete() throws Exception {
 
+		//je teste
+		
 		InputStream inS = socket.getInputStream();
 		DataOutputStream outS = new DataOutputStream(socket.getOutputStream());
 
