@@ -8,14 +8,19 @@ public class Server3 {
 
 	public static void main( String[] args ){
 
+		// On commence par créer une socket sur le port d'écoute 8080
 		try {
 			ServerSocket serverSocket = new ServerSocket(PORT);
-			System.out.println("�coute sur le port " + PORT + "...\n");
+			System.out.println("écoute sur le port " + PORT + "...\n");
 	
+			/*
+			 * On crée une socket pour chaque nouveau client
+			 * On créer un thread pour chaque nouvelle connexion, afin de ne pas bloquer le thread principal
+			 */
 			while(true) {
 				Socket clientSocket = serverSocket.accept();
 				
-				System.out.println("nouveau client connect� : " + clientSocket.getInetAddress().getHostAddress());
+				System.out.println("nouveau client connecté : " + clientSocket.getInetAddress().getHostAddress());
 				
 				Request request = new Request(clientSocket);
 				

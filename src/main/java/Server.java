@@ -39,7 +39,7 @@ public class Server implements Runnable{
 	public static void main(String[] args) throws Exception{
 		try {
 			ServerSocket serverSocket = new ServerSocket(PORT);
-			System.out.println("écoute sur le port " + PORT + "...\n");
+			System.out.println("Ã©coute sur le port " + PORT + "...\n");
 			
 			while (true) {
 				
@@ -83,7 +83,7 @@ public class Server implements Runnable{
 		String fichierRequete = null;
 		
 		try {
-			// on lit l'entrée du client via l'entrée de la socket
+			// on lit l'entrï¿½e du client via l'entrï¿½e de la socket
 			in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
 			
 			out = new PrintWriter(connect.getOutputStream());
