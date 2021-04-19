@@ -37,93 +37,107 @@ public class Request implements Runnable{
 	}
 
 	private void traitementRequete() throws Exception {
-		
-		//test branche distante
-		// test 2
-		
-		
+
 		InputStream inS = socket.getInputStream();
 		DataOutputStream outS = new DataOutputStream(socket.getOutputStream());
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(inS));
 
-		String requestLine = br.readLine();
+		String input = br.readLine();
+
+		StringTokenizer parse = new StringTokenizer(input);
+
+		String method = parse.nextToken().toUpperCase();
+
+		String fichierRequete = parse.nextToken().toLowerCase();
 
 		System.out.println();
-		System.out.println("Requete : " + requestLine);
-		
-		
+		System.out.println("méthode : " + method);
 
-		String headerLine = br.readLine();
+		if (method.equals("GET")) {
 
-		while(headerLine != null && headerLine.length() != 0) {
-			//System.out.println(headerLine);
-			headerLine = br.readLine();
-		}
-
-		StringTokenizer tokens = new StringTokenizer(requestLine);
-		tokens.nextToken();
-		String fileName = tokens.nextToken();
-
-		//fileName = "." + fileName;		
-
-		FileInputStream fis = null;
-		boolean existFile = true;
-		try {
-			//System.out.println(fileName);
-			fis = new FileInputStream(fileName);
-		} catch (FileNotFoundException e) {
-			existFile = false;
-		}
+			//		String requestLine = br.readLine();
+			//		
+			//		System.out.println();
+			//		System.out.println("Requete : " + requestLine);
 
 
-		String statusLine = null;
-		String contentTypeLine = null;
-		String entityBody = null;
 
-		Path filePath = getFilePath(fileName);
-		
-		if(Files.exists(filePath)) {
-			String contentType = guessContentType(filePath);
-			sendResponse(socket, "200", contentType, Files.readAllBytes(filePath));
+			//		String headerLine = br.readLine();
+			//
+			//		while(headerLine != null && headerLine.length() != 0) {
+			//			//System.out.println(headerLine);
+			//			headerLine = br.readLine();
+			//		}
+			//
+			//		StringTokenizer tokens = new StringTokenizer(requestLine);
+			//		tokens.nextToken();
+			//		String fileName = tokens.nextToken();
+
+			//fileName = "." + fileName;		
+
+			//		FileInputStream fis = null;
+			//		boolean existFile = true;
+			//		try {
+			//			//System.out.println(fileName);
+			//			fis = new FileInputStream(fileName);
+			//		} catch (FileNotFoundException e) {
+			//			existFile = false;
+			//		}
+
+
+			String statusLine = null;
+			String contentTypeLine = null;
+			String entityBody = null;
+			
+			System.out.println("requete : " + fichierRequete);
+
+			Path filePath = getFilePath(fichierRequete);
+
+			if(Files.exists(filePath)) {
+				String contentType = guessContentType(filePath);
+				sendResponse(socket, "200", contentType, Files.readAllBytes(filePath));
+			} else {
+
+				Path Error404_Path = Paths.get("tmp/404.html");
+				String contentType = guessContentType(Error404_Path);
+				sendResponse(socket, "400", contentType, Files.readAllBytes(Error404_Path));
+
+				//			byte[] notFound = "<h1>Désolé, la page demandée n'a pas été trouvée</h1>".getBytes();
+				//			sendResponse(socket, "404", "text/html", notFound);
+				//statusLine = "404";
+			}
+
+			//		if (existFile) {
+			//			statusLine = "200";
+			//			contentTypeLine = "Content-type: " + contentType(fileName) + CRLF;
+			//		}
+			//		else {
+			//			statusLine = "404";
+			//			contentTypeLine = "Le fichier n'existe pas";
+			//			entityBody = entityBody = "<HTML>" + 
+			//					"<HEAD><TITLE>Not Found</TITLE></HEAD>" +
+			//					"<BODY>Not Found</BODY></HTML>";
+			//		}
+
+			//		outS.writeBytes(statusLine);
+			//
+			//		outS.writeBytes(contentTypeLine);
+			//
+			//		outS.writeBytes(CRLF);
+
+			//		if (existFile)	{
+			//			sendBytes(fis, outS);
+			//			fis.close();
+			//		} else {
+			//			byte[] notFoundContent = "<h1>Not found </h1>".getBytes();
+			//			//sendResponse(socket, "Erreur", contentTypeLine, notFoundContent);
+			//			outS.writeBytes(entityBody);
+			//		}
+			//		outS.writeBytes(CRLF);
 		} else {
-			
-			Path Error404_Path = Paths.get("tmp/404.html");
-			String contentType = guessContentType(Error404_Path);
-			sendResponse(socket, "400", contentType, Files.readAllBytes(Error404_Path));
-			
-//			byte[] notFound = "<h1>Désolé, la page demandée n'a pas été trouvée</h1>".getBytes();
-//			sendResponse(socket, "404", "text/html", notFound);
-			//statusLine = "404";
+			System.out.println("méthode non traitée -> ignorée");
 		}
-		
-//		if (existFile) {
-//			statusLine = "200";
-//			contentTypeLine = "Content-type: " + contentType(fileName) + CRLF;
-//		}
-//		else {
-//			statusLine = "404";
-//			contentTypeLine = "Le fichier n'existe pas";
-//			entityBody = entityBody = "<HTML>" + 
-//					"<HEAD><TITLE>Not Found</TITLE></HEAD>" +
-//					"<BODY>Not Found</BODY></HTML>";
-//		}
-
-//		outS.writeBytes(statusLine);
-//
-//		outS.writeBytes(contentTypeLine);
-//
-//		outS.writeBytes(CRLF);
-
-//		if (existFile)	{
-//			sendBytes(fis, outS);
-//			fis.close();
-//		} else {
-//			byte[] notFoundContent = "<h1>Not found </h1>".getBytes();
-//			//sendResponse(socket, "Erreur", contentTypeLine, notFoundContent);
-//			outS.writeBytes(entityBody);
-//		}
-//		outS.writeBytes(CRLF);
 
 		// Close streams and socket.
 		outS.close();
@@ -161,12 +175,15 @@ public class Request implements Runnable{
 	private static Path getFilePath(String path) {
 		if ("/".equals(path)) {
 			path = "/index.html";
+		} else {
+			//path += "/index.html";
 		}
+
 		return Paths.get("tmp/www", path);
 	}
-	
+
 	private static String guessContentType(Path filePath) throws IOException {
-        return Files.probeContentType(filePath);
-    }
+		return Files.probeContentType(filePath);
+	}
 
 }
