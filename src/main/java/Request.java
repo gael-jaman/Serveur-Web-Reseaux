@@ -19,6 +19,8 @@ public class Request implements Runnable{
 	final static String CRLF = "\r\n";
 	Socket socket;
 	static String webFolder;
+	
+	//test branche br
 
 	public Request(Socket socket) {
 		super();
