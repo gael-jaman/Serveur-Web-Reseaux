@@ -18,11 +18,19 @@ public class Request implements Runnable{
 
 	final static String CRLF = "\r\n";
 	Socket socket;
+	static String webFolder;
 
 	public Request(Socket socket) {
 		super();
 		this.socket = socket;
 	}
+
+	public Request(Socket socket, String webFolder) {
+		super();
+		this.socket = socket;
+		this.webFolder = webFolder;
+	}
+
 
 
 	@Override
@@ -175,11 +183,14 @@ public class Request implements Runnable{
 	private static Path getFilePath(String path) {
 		if ("/".equals(path)) {
 			path = "/index.html";
-		} else {
-			//path += "/index.html";
+		} else if (path.charAt(path.length() - 1) == '/'){
+			path += "index.html";
+		}
+		else {
+			//path += "index.html";
 		}
 
-		return Paths.get("tmp/www", path);
+		return Paths.get(webFolder, path);
 	}
 
 	private static String guessContentType(Path filePath) throws IOException {
