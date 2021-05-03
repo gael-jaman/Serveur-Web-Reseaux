@@ -1,3 +1,4 @@
+package fr.ul.miage.reseaux;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -25,7 +26,7 @@ public class Server2 {
 
         StringBuilder requestBuilder = new StringBuilder();
         String line;
-        while (!(line = br.readLine()).isBlank()) {
+        while (!((line = br.readLine())=="")) {
             requestBuilder.append(line + "\r\n");
         }
 

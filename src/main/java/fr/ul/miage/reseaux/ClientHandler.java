@@ -1,3 +1,4 @@
+package fr.ul.miage.reseaux;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,7 +22,7 @@ public class ClientHandler implements Runnable{
 			StringBuilder requestBuilder = new StringBuilder();
 			String line;
 			
-			while(!(line = br.readLine()).isBlank()) {
+			while(!((line = br.readLine())=="")) {
 				requestBuilder.append(line + "\r\n");
 			}
 			
@@ -47,7 +48,7 @@ public class ClientHandler implements Runnable{
 //			String line;
 //			
 //			while ((line = in.readLine()) != null) {
-//				System.out.printf("Le client a envoyé : %s \n, line");
+//				System.out.printf("Le client a envoyï¿½ : %s \n, line");
 //				
 //				out.println(line);
 //				

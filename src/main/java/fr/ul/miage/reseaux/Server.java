@@ -1,3 +1,4 @@
+package fr.ul.miage.reseaux;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -67,7 +68,7 @@ public class Server implements Runnable{
 		
 		StringBuilder requestBuilder = new StringBuilder();
 		String line;
-		while (!(line = br.readLine()).isBlank()) {
+		while (!((line = br.readLine())=="")) {
 			requestBuilder.append(line + "\r\n");
 		}
 		
