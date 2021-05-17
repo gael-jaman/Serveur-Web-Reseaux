@@ -48,14 +48,14 @@ public class Server implements Runnable{
 					handleClient(client);
 				}
 				
-//				Server server = new Server(serverSocket.accept());
-//				
-//				if (verbose) {
-//					System.out.println("connection ouverte. (" + new Date() + ")");
-//				}
-//				
-//				Thread thread = new Thread(server);
-//				thread.start();
+				Server server = new Server(serverSocket.accept());
+				
+				if (verbose) {
+					System.out.println("connection ouverte. (" + new Date() + ")");
+				}
+				
+				Thread thread = new Thread(server);
+				thread.start();
 			}
 		} catch (IOException e) {
 			System.err.println("erreur de connexion : " + e.getMessage());
@@ -159,6 +159,7 @@ public class Server implements Runnable{
 			} catch (IOException ioe) {
 				System.err.println(ioe.getMessage());
 			}
+			
 		} catch (IOException ioe) {
 			System.err.println();
 		} finally {

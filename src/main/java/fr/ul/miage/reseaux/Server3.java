@@ -41,10 +41,6 @@ public class Server3 {
 				Thread thread = new Thread(request);
 
 				thread.start();
-
-				//ClientHandler clientSocket = new ClientHandler(client);
-
-				//new Thread(clientSocket).start();
 			}
 		} catch (IOException e) {
 			// TODO: handle exception
@@ -57,18 +53,6 @@ public class Server3 {
 
 	public void readProperties () {
 		try {
-			//File fileProperties = new File("properties.txt");
-			//String fileName = "properties.txt";
-//			URL url = getClass().getResource("/properties.txt");
-//			File fileProperties = new File(url.toURI());
-//			Scanner sc = new Scanner(fileProperties);
-
-			//			InputStream inputStream = this.getClass().getResourceAsStream("/properties.txt");
-			//			InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-			//			BufferedReader br = new BufferedReader(inputStreamReader);
-			//			Stream<String> lines = br.lines();
-			//			
-			//			String test = lines.toString();
 
 			InputStream is = getClass().getResourceAsStream("/properties.txt");
 			InputStreamReader steamReader = new InputStreamReader(is);
@@ -79,33 +63,17 @@ public class Server3 {
 
 			while ((line = br.readLine()) != null) {
 				properties = line.split(":", 2);
-
+				
 				switch (properties[0]) {
 				case "PORT" : 
 					PORT = Integer.parseInt(properties[1].replaceFirst(" ", ""));
 					break;
 
-				case "Répertoire_web" :
+				case "Web" :
 					webFolder = properties[1].replaceFirst(" ", "");
 					break;
 				}
 			}
-
-			//lines.forEach();
-
-//			while (sc.hasNextLine()) {
-//				String data = sc.next();
-//
-//				switch (data) {
-//				case "PORT:" : 
-//					PORT = sc.nextInt();
-//					break;
-//
-//				case "Répertoire_web:" :
-//					webFolder = sc.nextLine();
-//					break;
-//				}
-//			}
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
