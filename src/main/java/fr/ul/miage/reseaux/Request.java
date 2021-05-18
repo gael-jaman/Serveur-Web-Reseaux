@@ -51,17 +51,58 @@ public class Request implements Runnable{
 		DataOutputStream outS = new DataOutputStream(socket.getOutputStream());
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(inS));
+		
+		//----
+		
+		StringBuilder requestBuilder = new StringBuilder();
+        String line;
+        while (!(line = br.readLine()).isBlank()) {
+            requestBuilder.append(line + "\r\n");
+        }
 
-		String input = br.readLine();
+        String request = requestBuilder.toString();
+        String[] requestsLines = request.split("\r\n");
+        String[] requestLine = requestsLines[0].split(" ");
+        String method = requestLine[0];
+        String path = requestLine[1];
+        String version = requestLine[2];
+        String host = requestsLines[1].split(" ")[1];
+        
+        String[] splitDomain = host.split("\\.");
+        String tld = "";
+        String domaine = "";
+        String subDomaine = "";
+        String domainPath = "";
+        
+        //On récupère le chemin du domaine
+        if(splitDomain.length == 3) {
+        	subDomaine = splitDomain[0];
+        	domaine = splitDomain[1];
+        	tld = splitDomain[2];
+        	
+            domainPath = tld.concat("/").concat(domaine).concat("/").concat(subDomaine);
+        } else if (splitDomain.length == 2) {
+        	domaine = splitDomain[0];
+        	tld = splitDomain[1];
+        	
+            domainPath = tld.concat("/").concat(domaine);
+        }
+        
+        
+        //----
 
-		StringTokenizer parse = new StringTokenizer(input);
+		//String input = br.readLine();
 
-		String method = parse.nextToken().toUpperCase();
+		//StringTokenizer parse = new StringTokenizer(input);
 
-		String fichierRequete = parse.nextToken().toLowerCase();
+		//String method = parse.nextToken().toUpperCase();
+
+		//String fichierRequete = parse.nextToken().toLowerCase();
+        String fichierRequete = path;
 
 		System.out.println();
 		System.out.println("méthode : " + method);
+		System.out.println("host : " + host);
 
 		//On regarde si c'est une méthode GET
 		if (method.equals("GET")) {
@@ -71,6 +112,9 @@ public class Request implements Runnable{
 			String entityBody = null;
 			
 			System.out.println("requete : " + fichierRequete);
+			
+			//On créée le chemin vers le fichier avec le domaine
+			fichierRequete = domainPath.concat(fichierRequete);
 
 			//On récupère le chemin vers le fichier demandé par la requete
 			Path filePath = getFilePath(fichierRequete);

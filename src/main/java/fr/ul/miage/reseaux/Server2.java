@@ -12,7 +12,7 @@ import java.util.List;
 public class Server2 {
 
     public static void main( String[] args ) throws Exception {
-        try (ServerSocket serverSocket = new ServerSocket(8080)) {
+        try (ServerSocket serverSocket = new ServerSocket(80)) {
             while (true) {
                 try (Socket client = serverSocket.accept()) {
                     handleClient(client);
