@@ -46,6 +46,7 @@ public class Request implements Runnable{
 
 	private void traitementRequete() throws Exception {
 
+		//On récupère la requête et on parse son contenu
 		InputStream inS = socket.getInputStream();
 		DataOutputStream outS = new DataOutputStream(socket.getOutputStream());
 
@@ -62,6 +63,7 @@ public class Request implements Runnable{
 		System.out.println();
 		System.out.println("méthode : " + method);
 
+		//On regarde si c'est une méthode GET
 		if (method.equals("GET")) {
 
 			String statusLine = null;
@@ -70,11 +72,14 @@ public class Request implements Runnable{
 			
 			System.out.println("requete : " + fichierRequete);
 
+			//On récupère le chemin vers le fichier demandé par la requete
 			Path filePath = getFilePath(fichierRequete);
 			
 			//System.out.println(filePath.toString());
 
+			//On regarde si le fichier existe
 			if(Files.exists(filePath)) {
+				//On détermine son contenu
 				String contentType = guessContentType(filePath);
 				
 //				String customerKey = "Id";
@@ -96,9 +101,10 @@ public class Request implements Runnable{
 //				
 //				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				
-				
+				//On envoi le fichier au client
 				sendResponse(socket, "200", contentType, Files.readAllBytes(filePath));
 			} else {
+				//Si le fichier n'est pas trouvé, on envoi le code html pour afficher une erreur 404
 				statusLine = "404 File not found";
 				contentTypeLine = "File doesn't exists";
 				entityBody = "<HTML>" + 
@@ -118,6 +124,7 @@ public class Request implements Runnable{
 //				sendResponse(socket, "400", contentType, Files.readAllBytes(Error404_Path));
 			}
 		} else {
+			//Si la méthode n'est pas une méthode GET, on ne fait rien
 			System.out.println("méthode non traitée -> ignorée");
 		}
 
@@ -139,6 +146,9 @@ public class Request implements Runnable{
 		}
 	}
 
+	/*
+	 * On envoi la réponse au client
+	 */
 	private static void sendResponse(Socket client, String status, String contentType, byte[] content) throws IOException {
 		OutputStream clientOutput = client.getOutputStream();
 		clientOutput.write(("HTTP/1.1 \r\n" + status).getBytes());
@@ -154,6 +164,10 @@ public class Request implements Runnable{
 		return "html";
 	}
 
+	/*
+	 * Si le chemin fini par un '/', on rajoute 'index.html' pour afficher la page index du site.
+	 * On retourne ensuite le chemin vers le fichier en ajoutant le chemin vers le dossier contenant les sites web pour obtenir le chemin complet jusqu'au fichier
+	 */
 	private static Path getFilePath(String path) {
 		if ("/".equals(path)) {
 			path = "/index.html";

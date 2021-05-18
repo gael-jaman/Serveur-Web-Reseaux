@@ -22,7 +22,7 @@ public class Server3 {
 
 		readProperties();
 
-		// On commence par créer une socket sur le port d'écoute 8080
+		// On commence par créer une socket sur le port d'écoute défini dans le fichier properties
 		try {
 			ServerSocket serverSocket = new ServerSocket(PORT);
 			System.out.println("écoute sur le port " + PORT + "...\n");
@@ -51,6 +51,7 @@ public class Server3 {
 		}
 	}
 
+	//On lit les propriétes du fichier properties
 	public void readProperties () {
 		try {
 
