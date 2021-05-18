@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class Server3 {
 
-	static int PORT = 8080;
+	static int PORT = 80;
 	static String webFolder;
 
 	public void runServer(){
