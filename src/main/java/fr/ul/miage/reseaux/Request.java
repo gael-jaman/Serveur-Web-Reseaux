@@ -1,19 +1,17 @@
 package fr.ul.miage.reseaux;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.URL;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.StringTokenizer;
 
 public class Request implements Runnable{
@@ -74,22 +72,50 @@ public class Request implements Runnable{
 
 			Path filePath = getFilePath(fichierRequete);
 			
-			System.out.println(filePath.toString());
+			//System.out.println(filePath.toString());
 
 			if(Files.exists(filePath)) {
 				String contentType = guessContentType(filePath);
+				
+//				String customerKey = "Id";
+//				String customerSecret = "mdp";
+//				
+//				String plainCredentials = customerKey + ":" + customerSecret;
+//				String base64Credentials = new String(Base64.getEncoder().encode(plainCredentials.getBytes()));
+//				
+//				String authorizationHeader = "Basic " + base64Credentials;
+//				
+//				HttpClient client = HttpClient.newHttpClient();
+//				
+//				HttpRequest request = HttpRequest.newBuilder()
+//						.uri(URI.create("https://api.agora.io/dev/v1/projects"))
+//		                .GET()
+//		                .header("Authorization", authorizationHeader)
+//		                .header("Content-Type", "application/json")
+//		                .build();
+//				
+//				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+				
+				
 				sendResponse(socket, "200", contentType, Files.readAllBytes(filePath));
 			} else {
+				statusLine = "404 File not found";
+				contentTypeLine = "File doesn't exists";
+				entityBody = "<HTML>" + 
+					"<HEAD><TITLE>404 - Not Found</TITLE></HEAD>" +
+					"<BODY>Error 404 - File Not Found</BODY></HTML>";
 				
-				URL url = getClass().getResource("/tmp/404.html");
-
-				System.out.println("url : " + url);
+				outS.writeBytes(entityBody);
 				
-				//Path Error404_Path = Paths.get("tmp/404.html");
-				Path Error404_Path = Paths.get(url.toURI());
-				
-				String contentType = guessContentType(Error404_Path);
-				sendResponse(socket, "400", contentType, Files.readAllBytes(Error404_Path));
+//				URL url = getClass().getResource("/tmp/404.html");
+//
+//				System.out.println("url : " + url);
+//				
+//				//Path Error404_Path = Paths.get("tmp/404.html");
+//				Path Error404_Path = Paths.get(url.toURI());
+//				
+//				String contentType = guessContentType(Error404_Path);
+//				sendResponse(socket, "400", contentType, Files.readAllBytes(Error404_Path));
 			}
 		} else {
 			System.out.println("méthode non traitée -> ignorée");

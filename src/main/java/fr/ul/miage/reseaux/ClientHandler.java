@@ -2,7 +2,6 @@ package fr.ul.miage.reseaux;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable{
@@ -28,6 +27,8 @@ public class ClientHandler implements Runnable{
 			
 			String request = requestBuilder.toString();
 			System.out.println(request);
+			
+			//CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
