@@ -80,6 +80,10 @@ public class Request implements Runnable{
         	domaine = splitDomain[1];
         	tld = splitDomain[2];
         	
+        	if(tld.contains(":")) {
+        		tld = tld.split(":")[0];
+        	}
+        	
             domainPath = tld.concat("/").concat(domaine).concat("/").concat(subDomaine);
         } else if (splitDomain.length == 2) {
         	domaine = splitDomain[0];
@@ -103,7 +107,8 @@ public class Request implements Runnable{
 		System.out.println();
 		System.out.println("méthode : " + method);
 		System.out.println("host : " + host);
-
+		System.out.println("Ip de l'appelant : " + socket.getInetAddress());
+		
 		//On regarde si c'est une méthode GET
 		if (method.equals("GET")) {
 
