@@ -43,3 +43,4 @@ Aucune fonctionnalité bonus n'a été implémentée.
 ## Bug commum
 Il est possible que vous ayez cette erreur : java.net.BindException: Address already in use: bind
 Cela signifie que le serveur est déjà lancé et qu'il écoute déjà sur cette adresse. Vous devez donc fermer la connection déjà ouverte sur ce port
+# Web-server
