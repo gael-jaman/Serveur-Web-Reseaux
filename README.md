@@ -40,4 +40,6 @@ Mais si l'utilisateur rentre : localhost:80/verti, cela ne marchera pas
 La protection d'une ressource par une authentification basique n'a pas été implémentée.
 Aucune fonctionnalité bonus n'a été implémentée.
 
-
+## Bug commum
+Il est possible que vous ayez cette erreur : java.net.BindException: Address already in use: bind
+Cela signifie que le serveur est déjà lancé et qu'il écoute déjà sur cette adresse. Vous devez donc fermer la connection déjà ouverte sur ce port
