@@ -27,9 +27,7 @@ public class ClientHandler implements Runnable{
 			
 			String request = requestBuilder.toString();
 			System.out.println(request);
-			
-			//CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-			
+						
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

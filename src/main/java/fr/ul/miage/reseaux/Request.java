@@ -51,9 +51,7 @@ public class Request implements Runnable{
 		DataOutputStream outS = new DataOutputStream(socket.getOutputStream());
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(inS));
-		
-		//----
-		
+				
 		StringBuilder requestBuilder = new StringBuilder();
         String line;
         while (!(line = br.readLine()).isBlank()) {
@@ -92,22 +90,12 @@ public class Request implements Runnable{
             domainPath = tld.concat("/").concat(domaine);
         }
         
-        
-        //----
-
-		//String input = br.readLine();
-
-		//StringTokenizer parse = new StringTokenizer(input);
-
-		//String method = parse.nextToken().toUpperCase();
-
-		//String fichierRequete = parse.nextToken().toLowerCase();
         String fichierRequete = path;
 
 		System.out.println();
 		System.out.println("méthode : " + method);
 		System.out.println("host : " + host);
-		System.out.println("Ip de l'appelant : " + socket.getInetAddress());
+		System.out.println("Ip de l'appelant : " + socket.getRemoteSocketAddress());
 		
 		//On regarde si c'est une méthode GET
 		if (method.equals("GET")) {
@@ -131,25 +119,6 @@ public class Request implements Runnable{
 				//On détermine son contenu
 				String contentType = guessContentType(filePath);
 				
-//				String customerKey = "Id";
-//				String customerSecret = "mdp";
-//				
-//				String plainCredentials = customerKey + ":" + customerSecret;
-//				String base64Credentials = new String(Base64.getEncoder().encode(plainCredentials.getBytes()));
-//				
-//				String authorizationHeader = "Basic " + base64Credentials;
-//				
-//				HttpClient client = HttpClient.newHttpClient();
-//				
-//				HttpRequest request = HttpRequest.newBuilder()
-//						.uri(URI.create("https://api.agora.io/dev/v1/projects"))
-//		                .GET()
-//		                .header("Authorization", authorizationHeader)
-//		                .header("Content-Type", "application/json")
-//		                .build();
-//				
-//				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				
 				//On envoi le fichier au client
 				sendResponse(socket, "200", contentType, Files.readAllBytes(filePath));
 			} else {
@@ -161,27 +130,16 @@ public class Request implements Runnable{
 					"<BODY>Error 404 - File Not Found</BODY></HTML>";
 				
 				outS.writeBytes(entityBody);
-				
-//				URL url = getClass().getResource("/tmp/404.html");
-//
-//				System.out.println("url : " + url);
-//				
-//				//Path Error404_Path = Paths.get("tmp/404.html");
-//				Path Error404_Path = Paths.get(url.toURI());
-//				
-//				String contentType = guessContentType(Error404_Path);
-//				sendResponse(socket, "400", contentType, Files.readAllBytes(Error404_Path));
 			}
 		} else {
 			//Si la méthode n'est pas une méthode GET, on ne fait rien
 			System.out.println("méthode non traitée -> ignorée");
 		}
 
-		// Close streams and socket.
+		// Ferme la connexion et la socket.
 		outS.close();
 		br.close();
 		socket.close();
-		//System.out.println("Socket is closed now");
 
 	}
 
@@ -222,9 +180,6 @@ public class Request implements Runnable{
 			path = "/index.html";
 		} else if (path.charAt(path.length() - 1) == '/'){
 			path += "index.html";
-		}
-		else {
-			//path += "/index.html";
 		}
 
 		return Paths.get(webFolder, path);
